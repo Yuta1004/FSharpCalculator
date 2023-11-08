@@ -5,6 +5,8 @@
 ```
 // Run
 $ make run
+or
+$ make run-on-docker
 
 // Build
 $ make build
