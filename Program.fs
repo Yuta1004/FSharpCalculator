@@ -1,26 +1,28 @@
 ﻿open System.Text.RegularExpressions
 
 open Lex
+open Parse
+open Eval
 
-let recvInput =
-    printf ">> "
-    stdin.ReadLine()
-
-let parse tokenList =
-    printfn "%A" tokenList
-
-let eval ast =
-    Ok 0
+type TokenKind =
+    | Num
+    | Add
+    | Minus
+    | Mul
+    | Div
 
 [<EntryPoint>]
 let main argv =
     let tokenDefs = [
         (new Regex("^[0-9]+", RegexOptions.Compiled), TokenKind.Num);
-        (new Regex("^(\+|-|\*|/)", RegexOptions.Compiled), TokenKind.Char);
+        (new Regex("^\+", RegexOptions.Compiled), TokenKind.Add);
+        (new Regex("^-", RegexOptions.Compiled), TokenKind.Minus);
+        (new Regex("^\*", RegexOptions.Compiled), TokenKind.Mul);
+        (new Regex("^/", RegexOptions.Compiled), TokenKind.Div);
     ]
 
     let result =
-        recvInput
+        stdin.ReadLine()
         |> lex tokenDefs
         |> parse
         |> eval
