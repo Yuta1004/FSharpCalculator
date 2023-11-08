@@ -21,14 +21,15 @@ let main argv =
         (new Regex("^/", RegexOptions.Compiled), TokenKind.Div);
     ]
 
-    let result =
-        stdin.ReadLine()
-        |> lex tokenDefs
-        |> parse
-        |> eval
+    let exec =
+        let rec executor _ =
+            match stdin.ReadLine() with
+            | "exit" -> 0
+            | input ->
+                lex tokenDefs input
+                |> parse
+                |> eval
+                |> executor
+        executor (Ok 0)
 
-    match result with
-    | Ok res -> res
-    | Error msg ->
-        printfn "Error! %s" msg
-        1
+    exec
